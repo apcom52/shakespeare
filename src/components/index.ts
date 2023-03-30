@@ -1,0 +1,1 @@
+export { Shakespeare } from "./Shakespeare";
