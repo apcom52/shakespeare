@@ -2,6 +2,10 @@
   position: relative;
   display: flex;
   gap: 8px;
+
+  & + & {
+    margin-top: 12px;
+  }
 }
 
 .Container__actions {
@@ -11,5 +15,23 @@
 
 .Container__content {
   display: flex;
+  flex-direction: column;
   width: 100%;
+}
+
+.Container__name {
+  position: absolute;
+  background-color: var(--secondaryTextColor);
+  color: var(--textColorOnAccent);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 12px;
+  top: -18px;
+  left: 0;
+  padding: 2px 4px;
+  opacity: 0.5;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
 }

@@ -7,7 +7,7 @@ function App() {
   return (
     <Altrone>
       <main>
-        <Heading>Shakespeare</Heading>
+        <Heading>Demo</Heading>
         <Shakespeare />
       </main>
     </Altrone>

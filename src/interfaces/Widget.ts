@@ -1,4 +1,4 @@
-export interface Widget<Data, Params> {
+export interface Widget<Data extends BlockData, Params> {
   name: string;
   icon: JSX.Element;
   label: string;

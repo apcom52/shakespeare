@@ -1,8 +1,19 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useState } from "react";
 import { Button, Icon, Size } from "altrone-ui";
 import s from "./Container.module.scss";
+import { BlockData, Widget } from "../../interfaces/Widget";
 
-export const Container = ({ children }: PropsWithChildren) => {
+interface ContainerProps<D extends BlockData, P> {
+  widget: Widget<D, P>;
+}
+
+export const Container = <D extends BlockData, P>({
+  children,
+  widget,
+}: PropsWithChildren<ContainerProps<D, P>>) => {
+  const [data, setData] = useState<D>({} as D);
+  const [params, setParams] = useState<P>({} as P);
+
   return (
     <section className={s.Container}>
       <div className={s.Container__actions}>
@@ -51,7 +62,10 @@ export const Container = ({ children }: PropsWithChildren) => {
           <Icon i="add" />
         </Button>
       </div>
-      <div className={s.Container__content}>{children}</div>
+      <div className={s.Container__content}>
+        {widget.editMode(data, params)}
+      </div>
+      <div className={s.Container__name}>{widget.name}</div>
     </section>
   );
 };
