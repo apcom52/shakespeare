@@ -1,17 +1,16 @@
 import { Editor, EditorState } from "draft-js";
 import React, { useState } from "react";
+import "draft-js/dist/Draft.css";
+import s from "./TextEditor.module.scss";
 
 export const TextEditor = () => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
 
-  console.log(editorState);
-
   return (
-    <>
-      <p>value: {JSON.stringify(editorState)}</p>
-      <Editor editorState={editorState} onChange={setEditorState} />;
-    </>
+    <div className={s.TextEditor}>
+      <Editor editorState={editorState} onChange={setEditorState} />
+    </div>
   );
 };

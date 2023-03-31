@@ -1,0 +1,21 @@
+.TextEditor {
+  width: 100%;
+  :global(.DraftEditor-root) {
+    width: 100%;
+    min-height: 1em;
+
+    &:focus {
+      box-shadow: 0 0 0 1px var(--borderColor);
+    }
+  }
+
+  :global(.public-DraftEditor-content) {
+    padding: 4px 6px;
+    line-height: 1.5;
+    border-radius: 8px;
+
+    &:focus {
+      box-shadow: 0 0 0 1px var(--borderColor);
+    }
+  }
+}
