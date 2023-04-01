@@ -1,5 +1,6 @@
 import { Option, Select, TextInput, Toolbar, ToolbarGroup } from "altrone-ui";
 import React, { useState } from "react";
+import { WidgetEditModeProps } from "../../interfaces/Widget";
 
 type TLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -12,7 +13,7 @@ export interface HeadingParams {
   level: TLevel;
 }
 
-const HEADING_SELECT_OPTIONS: Option<number>[] = [
+export const HEADING_SELECT_OPTIONS: Option<number>[] = [
   {
     label: "Заголовок",
     value: 1,
@@ -23,24 +24,19 @@ const HEADING_SELECT_OPTIONS: Option<number>[] = [
   },
 ];
 
-export const HeadingParamsEditMode = (
-  data: HeadingData,
-  params: HeadingParams
-) => {
-  const [text, setText] = useState("");
+export const HeadingParamsEditMode = ({
+  data,
+  changeData,
+  params,
+}: WidgetEditModeProps<HeadingData, HeadingParams>) => {
+  const { content } = data;
 
   return (
     <>
-      <Toolbar width="100%">
-        <ToolbarGroup>
-          <Select
-            value={1}
-            options={HEADING_SELECT_OPTIONS}
-            onChange={() => null}
-          />
-        </ToolbarGroup>
-      </Toolbar>
-      <TextInput value={text} onChange={setText} />
+      <TextInput
+        value={content}
+        onChange={(value) => changeData("content", value)}
+      />
     </>
   );
 };
