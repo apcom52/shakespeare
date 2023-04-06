@@ -60,7 +60,11 @@ export const Container = <D extends BlockData, P>({
 
   return (
     <section className={s.Container}>
-      <div className={s.Container__actions}>
+      <div
+        className={clsx(s.Container__actions, {
+          [s.Container__actions_selected]: isAddMenuVisible,
+        })}
+      >
         <Button
           size={Size.small}
           isIcon
@@ -70,7 +74,7 @@ export const Container = <D extends BlockData, P>({
           <Icon i="add" />
         </Button>
       </div>
-      <div className={s.Container__content}>
+      <div className={clsx(s.Container__content)}>
         {widget.editMode({
           data,
           params,
@@ -86,6 +90,7 @@ export const Container = <D extends BlockData, P>({
           onClose={closeAddMenu}
           className={s.Container__menu}
           placement="bottom"
+          useRootContainer
         >
           <div className={s.Container__quickActions}>
             <button className={s.ContainerQuickAction}>

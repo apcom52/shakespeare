@@ -6,11 +6,36 @@
   & + & {
     margin-top: 12px;
   }
+
+  &:hover, &:focus {
+    .Container__actions {
+      left: -40px;
+      opacity: 1;
+    }
+  }
+
+  &:before {
+    position: absolute;
+    content: '';
+    z-index: 0;
+    width: 50px;
+    height: 100%;
+    background-color: transparent;
+    left: -50px;
+  }
 }
 
 .Container__actions {
   position: absolute;
-  left: -40px;
+  left: -20px;
+  opacity: 0;
+  transition: opacity 0.15s ease, left 0.25s ease;
+  z-index: 1;
+}
+
+.Container__actions_selected {
+  left: -40px !important;
+  opacity: 1 !important;
 }
 
 .Container__content {
