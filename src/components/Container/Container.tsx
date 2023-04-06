@@ -112,33 +112,37 @@ export const Container = <D extends BlockData, P>({
             </button>
           </div>
           <hr />
-          {paramsConfig.length && (
-            <Form className={s.Container__menuParams}>
-              <FormGroup>
-                {paramsConfig.map((param, paramIndex) => {
-                  if (param.type === "select") {
-                    return (
-                      <FormField label={param.label}>
-                        <Select
-                          value={params[param.name]}
-                          options={param.options}
-                          // @ts-ignore
-                          onChange={(value) => changeParam(param.name, value)}
-                        />
-                      </FormField>
-                    );
-                  } else if (param.type === "checkbox") {
-                    return (
-                      <FormField>
-                        <Checkbox onChange={() => null}>{param.label}</Checkbox>
-                      </FormField>
-                    );
-                  }
-                })}
-              </FormGroup>
-            </Form>
+          {paramsConfig.length > 0 && (
+            <>
+              <Form className={s.Container__menuParams}>
+                <FormGroup>
+                  {paramsConfig.map((param, paramIndex) => {
+                    if (param.type === "select") {
+                      return (
+                        <FormField label={param.label}>
+                          <Select
+                            value={params[param.name]}
+                            options={param.options}
+                            // @ts-ignore
+                            onChange={(value) => changeParam(param.name, value)}
+                          />
+                        </FormField>
+                      );
+                    } else if (param.type === "checkbox") {
+                      return (
+                        <FormField>
+                          <Checkbox onChange={() => null}>
+                            {param.label}
+                          </Checkbox>
+                        </FormField>
+                      );
+                    }
+                  })}
+                </FormGroup>
+              </Form>
+              <hr />
+            </>
           )}
-          <hr />
           <ContextMenu
             menu={[
               {

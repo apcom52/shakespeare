@@ -73,10 +73,8 @@
 }
 
 .Container__quickActions {
-  display: grid;
-  grid-template-columns: repeat(4, 45px);
-  grid-column-gap: 4px;
-  margin: 0 4px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .ContainerQuickAction {
