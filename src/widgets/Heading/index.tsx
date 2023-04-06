@@ -14,13 +14,11 @@ export default {
   label: "Heading",
   params: [
     {
-      type: "checkbox",
-      label: "Example of checkbox",
-    },
-    {
+      name: "level",
       type: "select",
-      label: "Select a style",
+      label: "Размер",
       options: HEADING_SELECT_OPTIONS,
+      defaultValue: HEADING_SELECT_OPTIONS[0].value,
     },
   ],
   editMode: HeadingParamsEditMode,

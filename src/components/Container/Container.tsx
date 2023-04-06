@@ -27,7 +27,16 @@ export const Container = <D extends BlockData, P>({
   const [data, setData] = useState<D>({} as D);
 
   const { params: paramsConfig = [] } = widget;
-  const [params, setParams] = useState<P>({} as P);
+  const [params, setParams] = useState<P>(() => {
+    const result = {};
+    for (const param of widget.params) {
+      result[param.name] = param.defaultValue;
+    }
+
+    return result as P;
+  });
+
+  console.log({ params, widget });
 
   const closeAddMenu = useCallback(() => {
     setIsAddMenuVisible(false);
@@ -106,9 +115,10 @@ export const Container = <D extends BlockData, P>({
                     return (
                       <FormField label={param.label}>
                         <Select
-                          value={params}
+                          value={params[param.name]}
                           options={param.options}
-                          onChange={setParams}
+                          // @ts-ignore
+                          onChange={(value) => changeParam(param.name, value)}
                         />
                       </FormField>
                     );
@@ -127,39 +137,33 @@ export const Container = <D extends BlockData, P>({
           <ContextMenu
             menu={[
               {
-                icon: <Icon i="delete" />,
-                title: "Delete",
-                danger: true,
-                onClick: () => null,
-              },
-              {
                 icon: <Icon i="title" />,
-                title: "Paragraph",
+                title: "Текст",
                 onClick: () => null,
               },
               {
                 icon: <Icon i="text_format" />,
-                title: "Heading",
+                title: "Заголовок",
                 onClick: () => null,
               },
               {
                 icon: <Icon i="remove" />,
-                title: "Separator",
+                title: "Разделитель",
                 onClick: () => null,
               },
               {
                 icon: <Icon i="format_list_bulleted" />,
-                title: "Marked list",
+                title: "Маркированный список",
                 onClick: () => null,
               },
               {
                 icon: <Icon i="format_list_numbered" />,
-                title: "Ordered list",
+                title: "Нумерованный список",
                 onClick: () => null,
               },
               {
                 icon: <Icon i="table_chart" />,
-                title: "Table",
+                title: "Таблица",
                 onClick: () => null,
               },
             ]}
