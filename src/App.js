@@ -5,7 +5,16 @@ import { Shakespeare } from "./components";
 import { useState } from "react";
 
 function App() {
-  const [text, setText] = useState([]);
+  const [text, setText] = useState({
+    name: "Example",
+    shakespeareVersion: 1,
+    content: [
+      {
+        id: "123",
+        widget: "divider",
+      },
+    ],
+  });
   const [readMode, setReadMode] = useState(false);
 
   return (
@@ -17,7 +26,23 @@ function App() {
         </Switcher>
         <hr />
         <br />
-        <Shakespeare content={text} onChange={setText} editMode={!readMode} />
+        <Shakespeare
+          document={text}
+          onDocumentChange={setText}
+          editMode={!readMode}
+        />
+        <details>
+          <summary>Document content</summary>
+          <p
+            style={{
+              wordWrap: "break-word",
+              maxWidth: "600px",
+              whiteSpace: "break-spaces",
+            }}
+          >
+            {JSON.stringify(text)}
+          </p>
+        </details>
       </main>
     </Altrone>
   );
