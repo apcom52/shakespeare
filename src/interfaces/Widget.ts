@@ -1,22 +1,20 @@
 import { WidgetParameters } from "./Params";
 
-export interface WidgetEditModeProps<Data, Params> {
+export interface WidgetEditModeProps<Data> {
   data: Data;
-  params: Params;
   changeData: (field: keyof Data, value: unknown) => void;
-  changeParam: (field: keyof Params, value: unknown) => void;
 }
 
-export interface Widget<Data extends BlockData, Params> {
+export interface Widget<Data extends BlockData> {
   name: string;
   icon: JSX.Element;
   label: string;
-  params: WidgetParameters[];
-  editMode: (props: WidgetEditModeProps<Data, Params>) => JSX.Element;
+  params: WidgetParameters<Data>;
+  editMode: (props: WidgetEditModeProps<Data>) => JSX.Element;
   render: (data: Data) => JSX.Element;
 }
 
 export interface BlockData {
-  id: Symbol;
+  id: string;
   widget: string;
 }

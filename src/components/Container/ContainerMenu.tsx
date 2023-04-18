@@ -17,20 +17,21 @@ import { useShakespeareActions } from "../../contexts/ShakespeareActionsContext"
 import { BlockData, Widget } from "../../interfaces/Widget";
 import { WidgetParameters } from "../../interfaces/Params";
 
-interface ContainerMenuProps<D extends BlockData, P> {
+interface ContainerMenuProps<D extends BlockData> {
   containerPosition: number;
-  widget: Widget<D, P>;
-  params: P;
-  changeParam: (field: keyof P, value: unknown) => void;
-  paramsConfig: WidgetParameters[];
+  data: D;
+  widget: Widget<D>;
+  params: WidgetParameters<D>;
+  changeData: (field: keyof D, value: unknown) => void;
 }
 
-export const ContainerMenu = <D extends BlockData, P>({
+export const ContainerMenu = <D extends BlockData>({
   widget,
+  data,
   containerPosition,
-  paramsConfig,
+  changeData,
   params,
-}: ContainerMenuProps<D, P>) => {
+}: ContainerMenuProps<D>) => {
   const { addWidget } = useShakespeareActions();
 
   const addButtonRef = useRef<HTMLButtonElement>(null);
@@ -83,19 +84,18 @@ export const ContainerMenu = <D extends BlockData, P>({
             </button>
           </div>
           <hr />
-          {paramsConfig.length > 0 && (
+          {params.length > 0 && (
             <>
               <Form className={s.Container__menuParams}>
                 <FormGroup>
-                  {paramsConfig.map((param, paramIndex) => {
+                  {params.map((param, paramIndex) => {
                     if (param.type === "select") {
                       return (
                         <FormField key={paramIndex} label={param.label}>
                           <Select
-                            value={params[param.name]}
+                            value={data[param.name]}
                             options={param.options}
-                            // @ts-ignore
-                            onChange={(value) => changeParam(param.name, value)}
+                            onChange={(value) => changeData(param.name, value)}
                           />
                         </FormField>
                       );

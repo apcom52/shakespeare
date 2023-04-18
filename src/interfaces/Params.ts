@@ -1,7 +1,7 @@
 import { Option } from "altrone-ui";
 
-interface Param {
-  name: string;
+interface Param<D> {
+  name: keyof D;
 }
 
 export interface SelectParam {
@@ -17,4 +17,4 @@ export interface CheckboxParam {
   defaultValue?: boolean;
 }
 
-export type WidgetParameters = Param & (SelectParam | CheckboxParam);
+export type WidgetParameters<D> = (Param<D> & (SelectParam | CheckboxParam))[];

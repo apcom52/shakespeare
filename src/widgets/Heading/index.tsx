@@ -7,6 +7,7 @@ import {
   HeadingParamsEditMode,
 } from "./HeadingEditMode";
 import React from "react";
+import { HeadingRenderer } from "./HeadingRenderer";
 
 export default {
   icon: <Icon i="" />,
@@ -22,5 +23,5 @@ export default {
     },
   ],
   editMode: HeadingParamsEditMode,
-  render: () => null,
-} as Widget<HeadingData & BlockData, HeadingParams>;
+  render: HeadingRenderer,
+} as Widget<HeadingData & BlockData>;

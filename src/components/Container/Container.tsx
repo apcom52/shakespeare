@@ -3,60 +3,57 @@ import s from "./Container.module.scss";
 import { BlockData, Widget } from "../../interfaces/Widget";
 import clsx from "clsx";
 import { ContainerMenu } from "./ContainerMenu";
+import { useEditModeContext } from "../../contexts/EditModeContext";
 
 interface ContainerProps<D extends BlockData, P> {
   containerPosition: number;
-  widget: Widget<D, P>;
+  widget: Widget<D>;
+  data: D;
+  onChangeData: (newData: Record<string, unknown>) => void;
 }
 
 export const Container = <D extends BlockData, P>({
   containerPosition,
   widget,
+  data,
+  onChangeData,
 }: PropsWithChildren<ContainerProps<D, P>>) => {
-  const [data, setData] = useState<D>({} as D);
+  const isEditMode = useEditModeContext();
 
-  const changeData = useCallback((field: keyof D, value: unknown) => {
-    setData((oldData) => ({
-      ...oldData,
-      [field]: value,
-    }));
-  }, []);
+  const changeData = useCallback(
+    (field: keyof D, value: unknown) => {
+      const newData = {
+        ...data,
+        [field]: value,
+      };
+
+      onChangeData(newData);
+    },
+    [onChangeData]
+  );
 
   const { params: paramsConfig = [] } = widget;
-  const [params, setParams] = useState<P>(() => {
-    const result = {};
-    for (const param of widget.params) {
-      result[param.name] = param.defaultValue;
-    }
 
-    return result as P;
-  });
-
-  const changeParam = useCallback((field: keyof P, value: unknown) => {
-    setParams((oldParams) => ({
-      ...oldParams,
-      [field]: value,
-    }));
-  }, []);
+  if (!isEditMode) {
+    return widget.render(data);
+  }
 
   return (
     <section className={s.Container}>
-      <ContainerMenu<D, P>
+      <ContainerMenu<D>
+        data={data}
         widget={widget}
         containerPosition={containerPosition}
-        params={params}
-        changeParam={changeParam}
-        paramsConfig={paramsConfig}
+        params={widget.params}
+        changeData={changeData}
       />
       <div className={clsx(s.Container__content)}>
         {widget.editMode({
           data,
-          params,
           changeData,
-          changeParam,
         })}
       </div>
-      <div className={s.Container__name}>{widget.name}</div>
+      {isEditMode && <div className={s.Container__name}>{widget.name}</div>}
     </section>
   );
 };

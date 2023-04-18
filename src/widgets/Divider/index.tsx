@@ -1,10 +1,7 @@
 import { Icon } from "altrone-ui";
 import { BlockData, Widget } from "../../interfaces/Widget";
-import {
-  DividerData,
-  DividerParams,
-  HeadingParamsEditMode,
-} from "./DividerEditMode";
+import { DividerData, DividerParams, DividerEditMode } from "./DividerEditMode";
+import { DividerRenderer } from "./DividerRenderer";
 import React from "react";
 
 export default {
@@ -12,6 +9,6 @@ export default {
   name: "divider",
   label: "Разделитель",
   params: [],
-  editMode: HeadingParamsEditMode,
-  render: () => null,
-} as Widget<DividerData & BlockData, DividerParams>;
+  editMode: DividerEditMode,
+  render: DividerRenderer,
+} as Widget<DividerData & BlockData>;

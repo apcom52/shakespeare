@@ -23,9 +23,7 @@ export const Shakespeare = ({
   onDocumentChange,
   editMode = true,
 }: ShakespeareProps) => {
-  console.log(document);
-
-  const addWidget = useCallback(
+  const addBlock = useCallback(
     (position = -1, widget = "text") => {
       const newWidget = {
         id: uuid(),
@@ -51,22 +49,42 @@ export const Shakespeare = ({
     [document, onDocumentChange]
   );
 
+  const editContainerData = useCallback(
+    (containerIndex: number, data: Record<string, unknown>) => {
+      const content = [...document.content];
+      content[containerIndex] = {
+        ...content[containerIndex],
+        ...data,
+      };
+
+      onDocumentChange({
+        ...document,
+        content,
+      });
+    },
+    [document, onDocumentChange]
+  );
+
   return (
     <ShakespeareActionsContext.Provider
       value={{
-        addWidget,
+        addWidget: addBlock,
       }}
     >
       <EditModeContext.Provider value={editMode}>
-        {document.content.map((container, containerIndex) => (
-          <Container
-            key={container.id}
-            containerPosition={containerIndex}
-            widget={BASIC_WIDGETS[container.widget]}
-          >
-            <TextEditor />
-          </Container>
-        ))}
+        <div>
+          {document.content.map((container, containerIndex) => (
+            <Container
+              key={`${container.id}-${editMode ? "U" : "R"}`}
+              containerPosition={containerIndex}
+              widget={BASIC_WIDGETS[container.widget]}
+              data={container}
+              onChangeData={(value) => editContainerData(containerIndex, value)}
+            >
+              <TextEditor />
+            </Container>
+          ))}
+        </div>
       </EditModeContext.Provider>
     </ShakespeareActionsContext.Provider>
   );

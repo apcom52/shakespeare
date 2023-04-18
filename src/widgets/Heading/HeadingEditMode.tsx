@@ -34,8 +34,7 @@ export const HEADING_SELECT_OPTIONS: Option<number>[] = [
 export const HeadingParamsEditMode = ({
   data,
   changeData,
-  params,
-}: WidgetEditModeProps<HeadingData, HeadingParams>) => {
+}: WidgetEditModeProps<HeadingData>) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [editorState, setEditorState] = useState(() =>
@@ -73,16 +72,13 @@ export const HeadingParamsEditMode = ({
     const ta = textareaRef.current;
     ta.style.height = "1px";
     ta.style.height = ta.scrollHeight + "px";
-  }, [data.content, params]);
+  }, [data.content, data.level]);
 
   return (
     <>
       <textarea
         ref={textareaRef}
-        className={clsx(
-          `alt-heading--level-${params.level}`,
-          s.HeadingTextarea
-        )}
+        className={clsx(`alt-heading--level-${data.level}`, s.HeadingTextarea)}
         value={data.content}
         onChange={(e) => changeData("content", e.target.value)}
       />
