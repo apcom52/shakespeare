@@ -1,4 +1,8 @@
-import React, { PropsWithChildren, useCallback, useRef, useState } from "react";
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+} from "react";
 import s from "./Container.module.scss";
 import { BlockData, Widget } from "../../interfaces/Widget";
 import clsx from "clsx";
@@ -19,6 +23,15 @@ export const Container = <D extends BlockData, P>({
   onChangeData,
 }: PropsWithChildren<ContainerProps<D, P>>) => {
   const isEditMode = useEditModeContext();
+
+  // apply default values
+  useEffect(() => {
+    for (const param of widget.params) {
+      if (data[param.name] === undefined && param.defaultValue) {
+        changeData(param.name, param.defaultValue);
+      }
+    }
+  }, []);
 
   const changeData = useCallback(
     (field: keyof D, value: unknown) => {
