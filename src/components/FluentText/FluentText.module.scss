@@ -7,4 +7,15 @@
   padding: 4px 8px;
   min-height: 24px;
   margin-bottom: 8px;
+  font-weight: 500;
+
+  a {
+    color: var(--accentText);
+    text-decoration: none;
+
+    &:hover, &:focus {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
 }

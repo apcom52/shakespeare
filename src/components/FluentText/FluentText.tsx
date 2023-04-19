@@ -3,14 +3,8 @@ import React, { useCallback, useId, useRef, useState } from "react";
 import sanitize from "sanitize-html";
 import ContentEditable from "react-contenteditable";
 import { useShakespeareActions } from "../../contexts/ShakespeareActionsContext";
-import {
-  Button,
-  ButtonContainer,
-  ButtonVariant,
-  FloatingBox,
-  Icon,
-  Size,
-} from "altrone-ui";
+import { ButtonContainer, FloatingBox } from "altrone-ui";
+import { FluentTextCommand } from "./FluentTextCommand";
 
 export const FluentText = () => {
   const { focusedText, focusText } = useShakespeareActions();
@@ -24,6 +18,7 @@ export const FluentText = () => {
   const isToolbarVisible = focusedText === textId;
 
   const onChange = useCallback((e) => {
+    console.log(">>>", e.currentTarget.innerHTML);
     const sanitizeConf = {
       allowedTags: ["b", "i", "u", "code", "a", "p"],
       allowedAttributes: { a: ["href"] },
@@ -36,7 +31,7 @@ export const FluentText = () => {
     focusText(textId);
   }, [textId]);
 
-  console.log(editorRef.current);
+  console.log(text);
 
   return (
     <>
@@ -48,41 +43,36 @@ export const FluentText = () => {
           onClose={() => null}
         >
           <ButtonContainer>
-            <Button
-              variant={ButtonVariant.transparent}
-              size={Size.small}
-              isIcon
-            >
-              <Icon i="format_bold" />
-            </Button>
-            <Button
-              variant={ButtonVariant.transparent}
-              size={Size.small}
-              isIcon
-            >
-              <Icon i="format_italic" />
-            </Button>
-            <Button
-              variant={ButtonVariant.transparent}
-              size={Size.small}
-              isIcon
-            >
-              <Icon i="format_underlined" />
-            </Button>
-            <Button
-              variant={ButtonVariant.transparent}
-              size={Size.small}
-              isIcon
-            >
-              <Icon i="link" />
-            </Button>
-            <Button
-              variant={ButtonVariant.transparent}
-              size={Size.small}
-              isIcon
-            >
-              <Icon i="code" />
-            </Button>
+            <FluentTextCommand
+              icon="format_bold"
+              command="bold"
+              title="Полужирный"
+              hotkey="b"
+              inFocus={true}
+              checked
+            />
+            <FluentTextCommand
+              icon="format_italic"
+              command="italic"
+              title="Курсив"
+            />
+            <FluentTextCommand
+              icon="format_underlined"
+              command="underline"
+              title="Подчеркивание"
+            />
+            <FluentTextCommand
+              icon="link"
+              args="https://github.com/lovasoa/react-contenteditable"
+              command="createLink"
+              title="Ссылка"
+            />
+            <FluentTextCommand
+              icon="code"
+              command="formatBlock"
+              title="Код"
+              args="CODE"
+            />
           </ButtonContainer>
         </FloatingBox>
       )}
