@@ -1,8 +1,4 @@
-import React, {
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-} from "react";
+import React, { PropsWithChildren, useCallback, useEffect } from "react";
 import s from "./Container.module.scss";
 import { BlockData, Widget } from "../../interfaces/Widget";
 import clsx from "clsx";

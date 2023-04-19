@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Container, TextEditor } from "../index";
 import { EditModeContext } from "../../contexts/EditModeContext";
 import HEADING_WIDGET from "../../widgets/Heading";
@@ -6,6 +6,7 @@ import DIVIDER_WIDGET from "../../widgets/Divider";
 import { ShakespeareDocument } from "../../interfaces/Document";
 import { v4 as uuid } from "uuid";
 import { ShakespeareActionsContext } from "../../contexts/ShakespeareActionsContext";
+import { FluentText } from "../FluentText/FluentText";
 
 const BASIC_WIDGETS: Record<string, any> = {
   heading: HEADING_WIDGET,
@@ -23,6 +24,8 @@ export const Shakespeare = ({
   onDocumentChange,
   editMode = true,
 }: ShakespeareProps) => {
+  const [focusedText, setFocusedText] = useState("");
+
   const addBlock = useCallback(
     (position = -1, widget = "text") => {
       const newWidget = {
@@ -69,9 +72,13 @@ export const Shakespeare = ({
     <ShakespeareActionsContext.Provider
       value={{
         addWidget: addBlock,
+        focusedText,
+        focusText: setFocusedText,
       }}
     >
       <EditModeContext.Provider value={editMode}>
+        <FluentText />
+        <br />
         <div>
           {document.content.map((container, containerIndex) => (
             <Container
