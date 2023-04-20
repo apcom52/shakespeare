@@ -5,6 +5,7 @@ import ContentEditable from "react-contenteditable";
 import { useShakespeareActions } from "../../contexts/ShakespeareActionsContext";
 import { ButtonContainer, FloatingBox } from "altrone-ui";
 import { FluentTextCommand } from "./FluentTextCommand";
+import { LinkModal } from "./LinkModal";
 
 export const FluentText = () => {
   const { focusedText, focusText } = useShakespeareActions();
@@ -14,6 +15,7 @@ export const FluentText = () => {
   const editorRef = useRef<ContentEditable>(null);
 
   const [text, setText] = useState("");
+  const [isLinkModalVisible, setIsLinkModalVisible] = useState(false);
 
   const isToolbarVisible = focusedText === textId;
 
@@ -30,6 +32,20 @@ export const FluentText = () => {
   const onFocus = useCallback(() => {
     focusText(textId);
   }, [textId]);
+
+  const onLinkButtonClick = useCallback(() => {
+    setIsLinkModalVisible(true);
+  }, []);
+
+  const addLinkCommand = useCallback((name, link) => {
+    editorRef.current.el.current.focus();
+    document.execCommand(
+      "insertHTML",
+      false,
+      ` <a href="${link}">${name}</a> `
+    );
+    setIsLinkModalVisible(false);
+  }, []);
 
   console.log(text);
 
@@ -65,8 +81,8 @@ export const FluentText = () => {
             <FluentTextCommand
               icon="link"
               args="https://github.com/lovasoa/react-contenteditable"
-              command="createLink"
               title="Ссылка (Cmd+H)"
+              onClick={onLinkButtonClick}
             />
             <FluentTextCommand
               icon="code"
@@ -76,6 +92,12 @@ export const FluentText = () => {
             />
           </ButtonContainer>
         </FloatingBox>
+      )}
+      {isLinkModalVisible && (
+        <LinkModal
+          onClose={() => setIsLinkModalVisible(false)}
+          onSubmit={addLinkCommand}
+        />
       )}
       <ContentEditable
         // @ts-ignore
