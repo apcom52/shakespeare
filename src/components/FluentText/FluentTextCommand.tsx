@@ -3,12 +3,13 @@ import React, { useEffect } from "react";
 
 interface FluentTextCommandProps {
   icon: string;
-  command: string;
   title: string;
+  command?: string;
   args?: any;
   hotkey?: string;
   inFocus?: boolean;
   checked?: boolean;
+  onClick?: () => void;
 }
 
 export const FluentTextCommand = ({
@@ -19,8 +20,9 @@ export const FluentTextCommand = ({
   hotkey,
   inFocus,
   checked = false,
+  onClick,
 }: FluentTextCommandProps) => {
-  const onClick = () => {
+  const defaultOnClick = () => {
     document.execCommand(command, false, args);
   };
 
@@ -44,11 +46,11 @@ export const FluentTextCommand = ({
 
   return (
     <Button
-      variant={ButtonVariant.transparent}
+      variant={checked ? ButtonVariant.default : ButtonVariant.transparent}
       size={Size.small}
       role={checked ? Role.primary : Role.default}
       title={title}
-      onClick={onClick}
+      onClick={onClick || defaultOnClick}
       isIcon
     >
       <Icon i={icon} />

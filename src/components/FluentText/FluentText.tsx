@@ -39,6 +39,7 @@ export const FluentText = () => {
         <FloatingBox
           targetElement={editorRef.current.el.current}
           useRootContainer
+          className="shakespeare-fluent-text-toolbar"
           placement="top-start"
           onClose={() => null}
         >
@@ -46,7 +47,7 @@ export const FluentText = () => {
             <FluentTextCommand
               icon="format_bold"
               command="bold"
-              title="Полужирный"
+              title="Полужирный (Cmd+B)"
               hotkey="b"
               inFocus={true}
               checked
@@ -54,24 +55,24 @@ export const FluentText = () => {
             <FluentTextCommand
               icon="format_italic"
               command="italic"
-              title="Курсив"
+              title="Курсив (Cmd+I)"
             />
             <FluentTextCommand
               icon="format_underlined"
               command="underline"
-              title="Подчеркивание"
+              title="Подчеркивание (Cmd+U)"
             />
             <FluentTextCommand
               icon="link"
               args="https://github.com/lovasoa/react-contenteditable"
               command="createLink"
-              title="Ссылка"
+              title="Ссылка (Cmd+H)"
             />
             <FluentTextCommand
               icon="code"
-              command="formatBlock"
-              title="Код"
-              args="CODE"
+              command="insertHTML"
+              title="Код (Cmd+M)"
+              args=" <code>code</code> "
             />
           </ButtonContainer>
         </FloatingBox>

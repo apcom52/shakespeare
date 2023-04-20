@@ -119,7 +119,7 @@ export const ContainerMenu = <D extends BlockData>({
               {
                 icon: <Icon i="title" />,
                 title: "Текст",
-                onClick: () => null,
+                onClick: () => addWidget(containerPosition + 1, "paragraph"),
               },
               {
                 icon: <Icon i="text_format" />,
