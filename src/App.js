@@ -11,40 +11,38 @@ function App() {
     content: [
       {
         id: "123",
-        widget: "divider",
+        widget: "paragraph",
       },
     ],
   });
   const [readMode, setReadMode] = useState(false);
 
   return (
-    <Altrone>
-      <main>
-        <Heading>Demo</Heading>
-        <Switcher checked={readMode} onChange={setReadMode}>
-          Режим чтения
-        </Switcher>
-        <hr />
-        <br />
-        <Shakespeare
-          document={text}
-          onDocumentChange={setText}
-          editMode={!readMode}
-        />
-        <details>
-          <summary>Document content</summary>
-          <p
-            style={{
-              wordWrap: "break-word",
-              maxWidth: "600px",
-              whiteSpace: "break-spaces",
-            }}
-          >
-            {JSON.stringify(text)}
-          </p>
-        </details>
-      </main>
-    </Altrone>
+    <main>
+      <Heading>Demo</Heading>
+      <Switcher checked={readMode} onChange={setReadMode}>
+        Режим чтения
+      </Switcher>
+      <hr />
+      <br />
+      <Shakespeare
+        document={text}
+        onDocumentChange={setText}
+        editMode={!readMode}
+      />
+      <details>
+        <summary>Document content</summary>
+        <p
+          style={{
+            wordWrap: "break-word",
+            maxWidth: "600px",
+            whiteSpace: "break-spaces",
+          }}
+        >
+          {JSON.stringify(text)}
+        </p>
+      </details>
+    </main>
   );
 }
 

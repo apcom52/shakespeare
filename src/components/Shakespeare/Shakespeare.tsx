@@ -9,6 +9,7 @@ import { v4 as uuid } from "uuid";
 import { ShakespeareActionsContext } from "../../contexts/ShakespeareActionsContext";
 import { FluentText } from "../FluentText/FluentText";
 import { useOutsideClick } from "rooks";
+import { Altrone, Theme } from "altrone-ui";
 
 const BASIC_WIDGETS: Record<string, any> = {
   heading: HEADING_WIDGET,
@@ -31,10 +32,12 @@ export const Shakespeare = ({
   const shakespeareRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick(shakespeareRef, (e) => {
-    // @ts-ignore
-    console.log(e.target.closest);
-    // @ts-ignore
-    if (e.target.closest(".shakespeare-fluent-text-toolbar")) {
+    if (
+      // @ts-ignore
+      e.target.closest(".shakespeare-fluent-text-toolbar") ||
+      // @ts-ignore
+      e.target.closest(".alt-shakespeare")
+    ) {
       return;
     }
     setFocusedText("");
@@ -83,34 +86,36 @@ export const Shakespeare = ({
   );
 
   return (
-    <div className="shakespeare" ref={shakespeareRef}>
-      <ShakespeareActionsContext.Provider
-        value={{
-          addWidget: addBlock,
-          focusedText,
-          focusText: setFocusedText,
-        }}
-      >
-        <EditModeContext.Provider value={editMode}>
-          <FluentText />
-          <br />
-          <div>
-            {document.content.map((container, containerIndex) => (
-              <Container
-                key={`${container.id}-${editMode ? "U" : "R"}`}
-                containerPosition={containerIndex}
-                widget={BASIC_WIDGETS[container.widget]}
-                data={container}
-                onChangeData={(value) =>
-                  editContainerData(containerIndex, value)
-                }
-              >
-                <TextEditor />
-              </Container>
-            ))}
-          </div>
-        </EditModeContext.Provider>
-      </ShakespeareActionsContext.Provider>
-    </div>
+    <Altrone theme={Theme.light} className="alt-shakespeare">
+      <div className="shakespeare" ref={shakespeareRef}>
+        <ShakespeareActionsContext.Provider
+          value={{
+            addWidget: addBlock,
+            focusedText,
+            focusText: setFocusedText,
+          }}
+        >
+          <EditModeContext.Provider value={editMode}>
+            <FluentText />
+            <br />
+            <div>
+              {document.content.map((container, containerIndex) => (
+                <Container
+                  key={`${container.id}-${editMode ? "U" : "R"}`}
+                  containerPosition={containerIndex}
+                  widget={BASIC_WIDGETS[container.widget]}
+                  data={container}
+                  onChangeData={(value) =>
+                    editContainerData(containerIndex, value)
+                  }
+                >
+                  <TextEditor />
+                </Container>
+              ))}
+            </div>
+          </EditModeContext.Provider>
+        </ShakespeareActionsContext.Provider>
+      </div>
+    </Altrone>
   );
 };

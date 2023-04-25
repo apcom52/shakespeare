@@ -1,11 +1,17 @@
 import s from "./FluentText.module.scss";
-import React, { useCallback, useId, useRef, useState } from "react";
+import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import sanitize from "sanitize-html";
 import ContentEditable from "react-contenteditable";
 import { useShakespeareActions } from "../../contexts/ShakespeareActionsContext";
 import { ButtonContainer, FloatingBox } from "altrone-ui";
 import { FluentTextCommand } from "./FluentTextCommand";
 import { LinkModal } from "./LinkModal";
+
+type Formatters = {
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+};
 
 export const FluentText = () => {
   const { focusedText, focusText } = useShakespeareActions();
@@ -16,6 +22,11 @@ export const FluentText = () => {
 
   const [text, setText] = useState("");
   const [isLinkModalVisible, setIsLinkModalVisible] = useState(false);
+  const [formatters, setFormatters] = useState<Formatters>({
+    bold: false,
+    italic: false,
+    underline: false,
+  });
 
   const isToolbarVisible = focusedText === textId;
 
@@ -47,7 +58,91 @@ export const FluentText = () => {
     setIsLinkModalVisible(false);
   }, []);
 
-  console.log(text);
+  const getSelection = useCallback(() => {
+    const selection = window.getSelection();
+
+    const selectionRange = selection.getRangeAt(0);
+
+    const parent =
+      selectionRange.commonAncestorContainer !== editorRef.current.el.current
+        ? selectionRange.commonAncestorContainer.parentElement.closest(
+            "[contenteditable]"
+          )
+        : selectionRange.commonAncestorContainer;
+
+    const start = selectionRange.startContainer;
+    const end = selectionRange.endContainer;
+
+    const childrenNodes = Array.from(parent.childNodes);
+
+    const treeToArray = (branch: ChildNode[]): ChildNode[] => {
+      let result = [];
+
+      for (const node of branch) {
+        const childNodes = Array.from(node.childNodes);
+        if (childNodes.length === 0) {
+          result.push(node);
+        } else {
+          result.push(...treeToArray(childNodes));
+        }
+      }
+
+      return result;
+    };
+
+    const plainNodes = treeToArray(childrenNodes);
+
+    const selectedStartIndex = plainNodes.findIndex((node) => node === start);
+    const selectedEndIndex = plainNodes.findIndex((node) => node === end);
+
+    const selectedNodes = plainNodes.slice(
+      selectedStartIndex,
+      selectedEndIndex + 1
+    );
+
+    const formatters: Formatters = {
+      bold: false,
+      italic: false,
+      underline: false,
+    };
+
+    for (const node of selectedNodes) {
+      if (!formatters.bold && node.parentElement.closest("b, strong")) {
+        formatters.bold = true;
+      }
+
+      if (!formatters.italic && node.parentElement.closest("i")) {
+        formatters.italic = true;
+      }
+
+      if (!formatters.underline && node.parentElement.closest("u")) {
+        formatters.underline = true;
+      }
+    }
+
+    return formatters;
+  }, []);
+
+  const onSelectionChange = useCallback(
+    (e) => {
+      if (e.target.activeElement === editorRef.current.el.current) {
+        setFormatters(getSelection());
+      }
+    },
+    [getSelection]
+  );
+
+  console.log(formatters);
+
+  useEffect(() => {
+    if (editorRef.current && editorRef.current.el) {
+      document.addEventListener("selectionchange", onSelectionChange);
+    }
+
+    return () => {
+      document.removeEventListener("selectionchange", onSelectionChange);
+    };
+  }, [editorRef.current?.el]);
 
   return (
     <>
@@ -66,17 +161,19 @@ export const FluentText = () => {
               title="Полужирный (Cmd+B)"
               hotkey="b"
               inFocus={true}
-              checked
+              checked={formatters.bold}
             />
             <FluentTextCommand
               icon="format_italic"
               command="italic"
               title="Курсив (Cmd+I)"
+              checked={formatters.italic}
             />
             <FluentTextCommand
               icon="format_underlined"
               command="underline"
               title="Подчеркивание (Cmd+U)"
+              checked={formatters.underline}
             />
             <FluentTextCommand
               icon="link"
@@ -89,6 +186,11 @@ export const FluentText = () => {
               command="insertHTML"
               title="Код (Cmd+M)"
               args=" <code>code</code> "
+            />
+            <FluentTextCommand
+              icon="help"
+              title="Get selection"
+              onClick={getSelection}
             />
           </ButtonContainer>
         </FloatingBox>
