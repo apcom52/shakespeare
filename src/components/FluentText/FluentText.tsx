@@ -15,14 +15,18 @@ type Formatters = {
   code: boolean;
 };
 
-export const FluentText = () => {
+interface FluentTextProps {
+  text: string;
+  onChange: (text: string) => void;
+}
+
+export const FluentText = ({ text = "", onChange }) => {
   const { focusedText, focusText } = useShakespeareActions();
 
   const textId = useId();
 
   const editorRef = useRef<ContentEditable>(null);
 
-  const [text, setText] = useState("");
   const [isLinkModalVisible, setIsLinkModalVisible] = useState(false);
   const [formatters, setFormatters] = useState<Formatters>({
     bold: false,
@@ -34,16 +38,17 @@ export const FluentText = () => {
 
   const isToolbarVisible = focusedText === textId;
 
-  const onChange = useCallback((e) => {
-    const sanitizeConf = {
-      allowedTags: ["b", "i", "u", "code", "a", "p"],
-      allowedAttributes: { a: ["href"] },
-    };
+  const onTextChange = useCallback(
+    (e) => {
+      const sanitizeConf = {
+        allowedTags: ["b", "i", "u", "code", "a", "p"],
+        allowedAttributes: { a: ["href"] },
+      };
 
-    setText(sanitize(e.currentTarget.innerHTML, sanitizeConf));
-  }, []);
-
-  console.log(`%${text}%`);
+      onChange(sanitize(e.currentTarget.innerHTML, sanitizeConf));
+    },
+    [onChange]
+  );
 
   const onFocus = useCallback(() => {
     focusText(textId);
@@ -217,7 +222,7 @@ export const FluentText = () => {
         // @ts-ignore
         ref={editorRef}
         html={text}
-        onChange={onChange}
+        onChange={onTextChange}
         className={s.FluentText}
         onFocus={onFocus}
       />

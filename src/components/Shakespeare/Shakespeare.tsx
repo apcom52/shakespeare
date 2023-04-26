@@ -96,8 +96,6 @@ export const Shakespeare = ({
           }}
         >
           <EditModeContext.Provider value={editMode}>
-            <FluentText />
-            <br />
             <div>
               {document.content.map((container, containerIndex) => (
                 <Container
