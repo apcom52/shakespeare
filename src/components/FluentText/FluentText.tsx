@@ -11,6 +11,8 @@ type Formatters = {
   bold: boolean;
   italic: boolean;
   underline: boolean;
+  link: boolean;
+  code: boolean;
 };
 
 export const FluentText = () => {
@@ -26,12 +28,13 @@ export const FluentText = () => {
     bold: false,
     italic: false,
     underline: false,
+    link: false,
+    code: false,
   });
 
   const isToolbarVisible = focusedText === textId;
 
   const onChange = useCallback((e) => {
-    console.log(">>>", e.currentTarget.innerHTML);
     const sanitizeConf = {
       allowedTags: ["b", "i", "u", "code", "a", "p"],
       allowedAttributes: { a: ["href"] },
@@ -39,6 +42,8 @@ export const FluentText = () => {
 
     setText(sanitize(e.currentTarget.innerHTML, sanitizeConf));
   }, []);
+
+  console.log(`%${text}%`);
 
   const onFocus = useCallback(() => {
     focusText(textId);
@@ -104,6 +109,8 @@ export const FluentText = () => {
       bold: false,
       italic: false,
       underline: false,
+      link: false,
+      code: false,
     };
 
     for (const node of selectedNodes) {
@@ -117,6 +124,14 @@ export const FluentText = () => {
 
       if (!formatters.underline && node.parentElement.closest("u")) {
         formatters.underline = true;
+      }
+
+      if (!formatters.link && node.parentElement.closest("a")) {
+        formatters.link = true;
+      }
+
+      if (!formatters.code && node.parentElement.closest("code")) {
+        formatters.code = true;
       }
     }
 
@@ -180,17 +195,14 @@ export const FluentText = () => {
               args="https://github.com/lovasoa/react-contenteditable"
               title="Ссылка (Cmd+H)"
               onClick={onLinkButtonClick}
+              checked={formatters.link}
             />
             <FluentTextCommand
               icon="code"
               command="insertHTML"
               title="Код (Cmd+M)"
               args=" <code>code</code> "
-            />
-            <FluentTextCommand
-              icon="help"
-              title="Get selection"
-              onClick={getSelection}
+              checked={formatters.code}
             />
           </ButtonContainer>
         </FloatingBox>

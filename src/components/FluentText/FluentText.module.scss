@@ -10,12 +10,30 @@
   font-weight: 500;
 
   a {
+    display: inline-flex;
+    align-items: center;
     color: var(--accentText);
     text-decoration: none;
+    cursor: default;
+    font-weight: 500;
+    background-color: #E3F2FD;
+    padding: 0 6px;
+    border-radius: 4px;
+
+    &:after {
+      content: '↗';
+      font-size: 12px;
+      margin-left: 4px;
+      font-weight: 700;
+      text-decoration: none !important;
+    }
 
     &:hover, &:focus {
-      text-decoration: underline;
-      cursor: pointer;
+      cursor: text;
+    }
+
+    &:hover:after {
+      text-decoration: none;
     }
   }
 
